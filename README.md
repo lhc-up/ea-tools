@@ -1,2 +1,3 @@
-# ea-tools
-ea-tools
+# EA-Tools
+
+EA-Tools
