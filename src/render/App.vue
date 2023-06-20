@@ -21,9 +21,6 @@ onMounted(() => {
     top: 0;
     left: 0;
     display: flex;
-    .sideBar {
-        
-    }
     .viewContent {
         flex: 1;
     }
