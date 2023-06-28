@@ -1,13 +1,13 @@
 export const routerList =  [
     {
-        path: '/index.html',
-        name: 'index',
+        path: '/home.html',
+        name: 'home',
         meta: {
             title: '首页',
             author: '--',
             parentRouter: '--'
         },
-        component: () => import('../views/index.vue'),
+        component: () => import('../views/home.vue'),
         children: []
     }
 ];

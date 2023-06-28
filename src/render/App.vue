@@ -1,6 +1,6 @@
 <template>
     <div class="app">
-        <sideBar></sideBar>
+        <sideBar title="123"></sideBar>
         <div class="viewContent">
             <router-view></router-view>
         </div>
@@ -8,10 +8,6 @@
 </template>
 <script setup lang="ts">
 import sideBar from './views/modules/sideBar.vue';
-import { onMounted, ref } from 'vue';
-onMounted(() => {
-    console.log(sideBar)
-});
 </script>
 <style lang="less">
 .app {

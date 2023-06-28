@@ -66,8 +66,6 @@ const build = {
     compress(filePath, zipPath, level=9, callback) {
         // 压缩文件所用
         const archiver = require('archiver');
-        // 修复压缩包插件中文名称bug
-        require('./libs/admzip.js');
         const output = fs.createWriteStream(zipPath);
         const archive = archiver('zip', {
             zlib: { level }
