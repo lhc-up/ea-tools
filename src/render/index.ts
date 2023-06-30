@@ -2,6 +2,7 @@ import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import router from './router/index';
 import App from './App.vue';
+import ViewUI from 'view-ui-plus';
 import '@/render/libs/styles/public.less';
 import { themeService } from '../services/theme';
 import { Theme } from '../constants/theme';
@@ -23,6 +24,6 @@ const app = createApp(App);
 const pinia = createPinia();
 app.use(router);
 app.use(pinia);
-console.log(router)
+app.use(ViewUI);
 
 router.isReady().then(() => app.mount('#app'));
