@@ -7,9 +7,11 @@ import '@/render/libs/styles/public.less';
 import { themeService } from '../services/theme';
 import { Theme } from '../constants/theme';
 import themeDark from '@/render/libs/styles/theme/darkTheme/theme.lazy.less';
-import themeLight from '@/render/libs/styles/theme/darkTheme/theme.lazy.less';
+import themeLight from '@/render/libs/styles/theme/lightTheme/theme.lazy.less';
 import { toolService } from '../services/tool';
 import { clientBuilder } from './views/tools/clientBuilder/entry';
+import { wordFix } from './views/tools/wordFix/entry';
+import { contextMenu } from './views/tools/contextMenu/entry';
 
 // 主题色
 themeService.registerTheme(Theme.Dark, [themeDark]);
@@ -18,7 +20,11 @@ themeService.registerTheme(Theme.Light, [themeLight]);
 themeService.applyTheme(Theme.Dark);
 
 // 工具
-toolService.registerTool(clientBuilder);
+// toolService.registerTool(clientBuilder);
+// 报告修复
+toolService.registerTool(wordFix);
+// 右键菜单
+toolService.registerTool(contextMenu);
 
 const app = createApp(App);
 const pinia = createPinia();

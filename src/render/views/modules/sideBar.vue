@@ -1,9 +1,12 @@
 <template>
     <div class="sideBar">
         <div class="menuList">
-            <div @click="changeTool(tool)" v-for="tool in toolList" :key="tool.name" :class="['menu', { 'current': tool.uid === currentTool.uid }]">{{ tool.name }}</div>
+            <div @click="changeTool(tool)" v-for="tool in toolList" :key="tool.name" :class="['menu', { 'current': tool.uid === currentToolId }]">{{ tool.name }}</div>
             <!-- <div v-for="tool in toolList" :key="tool.name" class="menu current">打包</div> -->
             <!-- <div class="menu">{{entryList.length}}</div> -->
+        </div>
+        <div class="settings">
+            <Icon type="ios-cog-outline" />
         </div>
     </div>
 </template>
@@ -16,16 +19,15 @@ import { useRouter } from 'vue-router';
 defineProps(['title']);
 
 const toolList = toolService.toolList;
-ref(toolList);
 
-let currentTool: Tool = toolList[0];
+let currentToolId = ref(toolList[0].uid);
 
 const router = useRouter();
 const changeTool = (tool: Tool) => {
     const route = toRaw(router.currentRoute).value;
-    if (tool.uid === currentTool.uid && tool.entry.name === route?.name) return;
-    currentTool = tool;
+    if (tool.uid === currentToolId.value && tool.entry.name === route?.name) return;
     router.push(tool.entry);
+    currentToolId.value = tool.uid;
 }
 
 onMounted(() => {
@@ -36,20 +38,35 @@ onMounted(() => {
 
 <style lang="less" scoped>
 .sideBar {
+    position: relative;
     width: 60px;
-    background-color: #0D1126;
+    background-color: var(--menuBgColor);
     .menuList {
-        color: #bfbfbf;
+        color: var(--menuFontColor);
         .menu {
             height: 50px;
             line-height: 50px;
             text-align: center;
-            border-bottom: 1px solid #353F6E;
+            border-bottom: 1px solid var(--menuItemBorderColor);
             cursor: pointer;
             &.current, &:hover {
-                background-color: #353F6E;
-                color: #fff;
+                background-color: var(--menuActiveBgColor);
+                color: var(--menuActiveFontColor);
             }
+        }
+    }
+    .settings {
+        position: absolute;
+        bottom: 20px;
+        left: 0;
+        width: 60px;
+        font-size: 28px;
+        color: var(--primaryText);
+        text-align: center;
+        cursor: pointer;
+        &:hover {
+            background-color: var(--menuActiveBgColor);
+            color: var(--menuActiveFontColor);
         }
     }
 }

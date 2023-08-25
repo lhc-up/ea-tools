@@ -1,7 +1,7 @@
 import { RouteRecordRaw } from 'vue-router';
 
 export interface ToolOptions {
-    routerList: RouteRecordRaw[];
+    routeList: RouteRecordRaw[];
     name: string;
     entry: RouteRecordRaw;
     icon?: string;
@@ -9,14 +9,14 @@ export interface ToolOptions {
 
 export class Tool {
     uid: Symbol;
-    routerList: RouteRecordRaw[];
+    routeList: RouteRecordRaw[];
     name: string;
     entry: RouteRecordRaw;
     icon?: string;
     constructor(options: ToolOptions) {
-        this.uid = Symbol();
+        this.uid = Symbol(options.name);
         this.name = options.name;
-        this.routerList = options.routerList;
+        this.routeList = options.routeList;
         this.entry = options.entry;
         this.icon = options.icon;
     }

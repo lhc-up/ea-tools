@@ -1,9 +1,20 @@
 import { RouteRecordRaw } from 'vue-router';
 
-export const routerList: RouteRecordRaw[] = [
+export const routeList: RouteRecordRaw[] = [
     {
-        path: '/clientBuilder.html',
-        name: 'clientBuilder',
+        path: '/wordFix/runTask.html',
+        name: 'wordFix/runTask',
+        meta: {
+            title: '执行任务',
+            author: '--',
+            parentRouter: 'wordFix'
+        },
+        component: () => import('./pages/runTask.vue'),
+        children: []
+    },
+    {
+        path: '/wordFix.html',
+        name: 'wordFix',
         meta: {
             title: '首页',
             author: '--',
@@ -11,5 +22,17 @@ export const routerList: RouteRecordRaw[] = [
         },
         component: () => import('./index.vue'),
         children: []
-    }
+    },
+    {
+        path: '/wordFix/addTask.html',
+        name: 'wordFix/addTask',
+        meta: {
+            title: '添加任务',
+            author: '--',
+            parentRouter: 'wordFix'
+        },
+        component: () => import('./pages/addTask.vue'),
+        children: []
+    },
+    
 ]

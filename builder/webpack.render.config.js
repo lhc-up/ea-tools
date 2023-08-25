@@ -3,6 +3,7 @@ const { VueLoaderPlugin } = require('vue-loader/dist/index');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const copyWebpackPlugin = require('copy-webpack-plugin');
 
 // 是否是调试模式
 const devMode = process.env.NODE_ENV === 'development';
@@ -15,12 +16,12 @@ module.exports = {
     output: {
         path: path.join(__dirname, '../app/'),
         publicPath: devMode ? '/' : '',
-        filename: './js/[name].[contenthash:8].js',
+        filename: './js/[name].js',
         globalObject: 'this'
     },
     optimization: {
         runtimeChunk: false,
-        minimize: !devMode,
+        minimize: false,
         splitChunks: {
             chunks: 'initial',
             cacheGroups: {
@@ -163,7 +164,15 @@ module.exports = {
             ignoreOrder: true
         }),
         new VueLoaderPlugin(),
-        new ForkTsCheckerWebpackPlugin()
+        new ForkTsCheckerWebpackPlugin(),
+        new copyWebpackPlugin({
+            patterns: [
+                {
+                    from: 'src/render/views/tools/wordfix/libs/jsdoc',
+                    to: path.join(__dirname, '../app/jsdoc')
+                }
+            ]
+        })
     ],
     target: 'electron-renderer'
 }

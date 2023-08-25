@@ -1,5 +1,7 @@
 <template>
-    <div class="frame"></div>
+    <div class="frame">
+        <h1>home</h1>
+    </div>
 </template>
 
 <script setup lang="ts">

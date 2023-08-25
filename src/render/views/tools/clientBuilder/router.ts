@@ -1,6 +1,6 @@
 import { RouteRecordRaw } from 'vue-router';
 
-export const routerList: RouteRecordRaw[] = [
+export const routeList: RouteRecordRaw[] = [
     {
         path: '/clientBuilder.html',
         name: 'clientBuilder',

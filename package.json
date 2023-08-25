@@ -6,7 +6,12 @@
     "main": "app/main.js",
     "scripts": {
         "start": "cross-env NODE_ENV=development node ./builder/dev.js",
-        "build": "cross-env NODE_ENV=production node ./builder/build.js"
+        "build": "cross-env NODE_ENV=production node ./builder/build.js",
+        "compile:wordfix": "tsc src/render/views/tools/wordFix/libs/*.ts --outDir src/render/views/tools/wordFix/libs/jsdoc/js",
+        "doc": "jsdoc -c src/render/views/tools/wordFix/libs/jsdoc/jsdoc.config.js src/render/views/tools/wordFix/libs/jsdoc/js/*.js -d src/render/views/tools/wordFix/libs/jsdoc/doc"
+    },
+    "jsdoc": {
+        "wordfix": "src/render/views/tools/wordFix/libs/jsdoc"
     },
     "license": "MIT",
     "build": {
@@ -70,18 +75,22 @@
         "@babel/plugin-syntax-dynamic-import": "^7.8.3",
         "@babel/polyfill": "^7.8.7",
         "@babel/preset-env": "^7.9.6",
-        "@electron/remote": "^2.0.9",
+        "@electron/remote": "^2.0.10",
+        "@types/archiver": "^5.3.2",
         "@types/lodash": "^4.14.195",
         "@vue/compiler-sfc": "^3.3.4",
         "babel-loader": "^8.1.0",
+        "copy-webpack-plugin": "^11.0.0",
         "cross-env": "^7.0.3",
         "css-hot-loader": "^1.4.4",
         "css-loader": "^3.5.3",
         "electron": "^24.2.0",
         "electron-builder": "^22.4.0",
+        "file-loader": "^6.2.0",
         "fork-ts-checker-webpack-plugin": "^8.0.0",
         "html-loader": "^4.2.0",
         "html-webpack-plugin": "^5.5.1",
+        "jsdoc": "^4.0.2",
         "less": "^3.11.1",
         "less-loader": "^6.1.0",
         "mini-css-extract-plugin": "^2.7.5",
@@ -97,7 +106,6 @@
     },
     "dependencies": {
         "archiver": "^5.3.1",
-        "file-loader": "^6.2.0",
         "fs-extra": "^11.1.1",
         "lodash": "^4.17.21",
         "pinia": "^2.1.4",

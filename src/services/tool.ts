@@ -7,7 +7,9 @@ export class ToolService {
 
     registerTool(tool: Tool) {
         this.tools.add(tool);
-        router.addRoute(tool.entry);
+        tool.routeList.forEach(route => {
+            router.addRoute(route);
+        });
     }
 
     /**

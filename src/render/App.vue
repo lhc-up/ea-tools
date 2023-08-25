@@ -16,9 +16,17 @@ import sideBar from './views/modules/sideBar.vue';
     height: 100%;
     top: 0;
     left: 0;
-    display: flex;
+    .sideBar {
+        height: 100%;
+    }
     .viewContent {
-        flex: 1;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        padding-left: 60px;
+        z-index: -1;
     }
 }
 </style>

@@ -1,12 +1,12 @@
 import { Tool } from '../tool';
-import { routerList } from './router';
+import { routeList } from './router';
 
 export class WordFix extends Tool {
     constructor() {
         super({
             name: '刷报告',
-            routerList,
-            entry: routerList[0]
+            routeList,
+            entry: routeList[0]
         });
     }
 }
