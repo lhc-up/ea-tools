@@ -6,20 +6,6 @@ const archiver = require('archiver');
 const fsExtra = require('fs-extra');
 const extract = require('extract-zip');
 
-// cheerio解析xml参数
-const cheerioOptions = {
-    normalizeWhitespace: false,
-    xmlMode: true,
-    decodeEntities: false
-};
-
-function get$($) {
-    if ($.find && $.find instanceof Function) {
-        return $.find.bind($);
-    }
-    return $;
-}
-
 function getFileList(dirPath) {
     const fileList = fs.readdirSync(dirPath, { withFileTypes: true });
     return fileList.filter(dirent => {
@@ -306,17 +292,6 @@ function getChartDrawingPathByChartPath(chartPath) {
     const drawingTarget = rel.attr('Target');
     return path.resolve(path.dirname(chartPath), drawingTarget);
 }
-/**
- * 解析xml文件
- * @param filePath xml文件路径
- */
-function loadXmlFile(filePath) {
-    try {
-        return cheerio.load(fs.readFileSync(filePath), cheerioOptions);
-    } catch (err) {
-        throw new Error('解析xml文件失败,filePath:' + filePath);
-    }
-}
 
 /**
  * 往wp的一个wr中写入文字
@@ -333,82 +308,6 @@ function writeToWpInSingleWr($wp, text) {
 
 function deleteFileSync(filePath) {
     fsExtra.removeSync(filePath);
-}
-
-/**
- * 解析xml字符串
- * @param xml xml字符串
- * @returns $
- */
-function loadXmlStr(xml) {
-    try {
-        return cheerio.load(xml, cheerioOptions);
-    } catch (err) {
-        throw new Error('解析xml字符串失败,xml:' + xml);
-    }
-}
-/**
- * 解压word，重命名->解压->重命名
- * @param {String} word文档地址 docPath 
- * @returns Promise<dirPath>
- */
-function unPkg(docPath) {
-    return new Promise((resolve, reject) => {
-        const zipPath = docPath.replace('.docx', '.zip');
-        const dirPath = docPath.replace('.docx', '');
-        fs.renameSync(docPath, zipPath);
-
-        try {
-            const zip = new AdmZip(zipPath);
-            zip.extractAllTo(dirPath, true);
-
-            fs.renameSync(zipPath, docPath);
-
-            resolve(dirPath);
-        } catch(err) {
-            reject(err);
-        }
-    });
-}
-
-/**
- * 把文件夹目录打包成docx文件
- * zip会打包到和unPkgPath同一级目录
- * 如果目标地址已经有同名文件，则会覆盖
- * @param {String} unPkgPath 解压后的word文档目录
- * @param {String} destPath 目标地址，不传则在当前目录生成并覆盖原文件
- * @returns Promise<destPath>
- */
-function pkg(unPkgPath, destPath) {
-    return new Promise((resolve, reject) => {
-        try {
-            destPath = destPath || `${unPkgPath}.docx`;
-            const zipPath = `${unPkgPath}.zip`;
-            const output = fs.createWriteStream(zipPath);
-            const archive = archiver('zip', {zlib: {level: 8}});
-            archive.pipe(output);
-            archive.directory(unPkgPath, false);
-            archive.finalize();
-
-            archive.on('error', e => {
-                reject(e);
-            });
-
-            // 创建流失败时触发的error，不会触发archive的error事件
-            output.on('error', e => {
-                reject(e);
-            });
-
-            // archive写入完成后，ouput自动关闭
-            output.on('close', () => {
-                // 重命名为docx
-                fs.renameSync(zipPath, destPath);
-                resolve(destPath);
-            });
-        } catch(e) {
-            reject(e);
-        }
-    });
 }
 
 /**
@@ -503,8 +402,6 @@ module.exports = {
     getChartDrawingPathByChartPath,
     loadXmlFile,
     loadXmlStr,
-    unPkg,
-    pkg,
     deleteFileSync,
     getTableCellText,
     getWpAllText,

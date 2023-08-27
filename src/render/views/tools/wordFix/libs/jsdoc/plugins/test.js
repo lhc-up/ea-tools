@@ -23,10 +23,16 @@ module.exports = {
             }
         },
         parseComplete: (({ sourcefiles, doclets }) => {
-            const code = `
-                exports.docs = ${JSON.stringify(docs, null, 4)};
-                exports.files = ${JSON.stringify(files, null, 4)};
-            `;
+            const moduleList = [];
+            moduleList.push({
+                type: 'docs',
+                list: docs
+            });
+            moduleList.push({
+                type: 'files',
+                list: files
+            });
+            const code = `exports.moduleList = ${JSON.stringify(moduleList, null, 4)};`;
             fs.writeFileSync(path.join(__dirname, '..', 'js/tools.js'), code);
         })
     }

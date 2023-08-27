@@ -2,14 +2,14 @@ import { RouteRecordRaw } from 'vue-router';
 
 export const routeList: RouteRecordRaw[] = [
     {
-        path: '/wordFix/runTask.html',
-        name: 'wordFix/runTask',
+        path: '/wordFix/addTask.html',
+        name: 'wordFix/addTask',
         meta: {
-            title: '执行任务',
+            title: '添加任务',
             author: '--',
             parentRouter: 'wordFix'
         },
-        component: () => import('./pages/runTask.vue'),
+        component: () => import('./pages/addTask.vue'),
         children: []
     },
     {
@@ -23,16 +23,16 @@ export const routeList: RouteRecordRaw[] = [
         component: () => import('./index.vue'),
         children: []
     },
+    
     {
-        path: '/wordFix/addTask.html',
-        name: 'wordFix/addTask',
+        path: '/wordFix/runTask.html',
+        name: 'wordFix/runTask',
         meta: {
-            title: '添加任务',
+            title: '执行任务',
             author: '--',
             parentRouter: 'wordFix'
         },
-        component: () => import('./pages/addTask.vue'),
+        component: () => import('./pages/runTask.vue'),
         children: []
     },
-    
 ]
