@@ -20,7 +20,7 @@ Object.assign(global, {
     cookie: {}
 });
 
-app.on('ready', () => {
+app.whenReady().then(() => {
     initTray();
     nativeTheme.themeSource = 'dark';
     //注册快捷键打开控制台事件

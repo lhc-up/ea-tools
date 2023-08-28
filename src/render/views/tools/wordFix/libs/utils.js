@@ -6,21 +6,6 @@ const archiver = require('archiver');
 const fsExtra = require('fs-extra');
 const extract = require('extract-zip');
 
-function getFileList(dirPath) {
-    const fileList = fs.readdirSync(dirPath, { withFileTypes: true });
-    return fileList.filter(dirent => {
-        // 过滤其他不相关文件，只保留文件夹和word文件
-        const ext = path.extname(dirent.name);
-        return dirent.isDirectory() || (dirent.isFile() && ext === '.docx');
-    }).map(dirent => {
-        if (dirent.isFile()) {
-            return path.join(dirPath, dirent.name);
-        }
-        // isDirectory
-        return getFileList(path.join(dirPath, dirent.name));
-    }).flat();
-}
-
 /**
  * 设置wp缩进
  * @param {Object} $wp wp引用
@@ -88,32 +73,6 @@ function getNumberingByName($, text, trim=true, strict=true) {
 }
 
 /**
- * 找到文本内容所在的wt
- * @param {Object} $ xml引用
- * @param {String} text 文本内容
- * @param {Boolean} strict 是否严格模式，严格模式全等匹配
- */
-function getWtByText($, text, strict=true) {
-    if ($.find && $.find instanceof Function) {
-        $ = $.find.bind($);
-    }
-    const wtList = $('w\\:t');
-    for (let i = 0; i < wtList.length; i++) {
-        const wt = wtList.eq(i);
-        if (strict) {
-            if (wt.text() === text) {
-                return wt;
-            }
-        } else {
-            if (wt.text().indexOf(text) >= 0) {
-                return wt;
-            }
-        }
-    }
-    return null;
-}
-
-/**
  * 获取脚注文件路径
  * @param {String} docPath 文档文件夹
  * @returns 脚注文件路径
@@ -166,37 +125,6 @@ function getFootnoteContentById(docPath, id) {
         wpText += getWpAllText($(wp));
     });
     return wpText;
-}
-
-/**
- * 找到文本内容所在的wp，文本可能存在于多个wr的wt中
- * @param {Object} $ xml引用
- * @param {String} text 文本内容
- * @param {Boolean} strict 是否严格模式
- * @param {Boolean} trim 是否忽略空格
- * @returns wp xml
- */
-function getWpByText($, text, strict=false, trim=false) {
-    if ($.find && $.find instanceof Function) {
-        $ = $.find.bind($);
-    }
-    const wpList = $('w\\:p');
-    for (let i = 0; i < wpList.length; i++) {
-        const wp = wpList.eq(i);
-        
-        // 不匹配目录中的文本
-        if (wp.find('w\\:hyperlink').length > 0) continue;
-
-        let wpText = getWpAllText(wp);
-        if (trim) {
-            wpText = wpText.replace(/ /g, '');
-        }
-        // 严格匹配时，wpText必须和给定文本相等
-        // 非严格匹配时，wpText包含给定文本
-        const is = strict ? wpText === text : wpText.includes(text);
-        if (is) return wp;
-    }
-    return null;
 }
 
 /**
@@ -306,10 +234,6 @@ function writeToWpInSingleWr($wp, text) {
     $wp.append($wr);
 }
 
-function deleteFileSync(filePath) {
-    fsExtra.removeSync(filePath);
-}
-
 /**
  * 获取表格指定单元格内容
  * @param {String} $tbl 表格引用
@@ -324,20 +248,6 @@ function getTableCellText($tbl, trIndex, tcIndex, toNumber=false) {
     const text = $tc.find('w\\:t').text();
     
     return toNumber ? parseFloat(text) : text;
-}
-
-/**
- * 获取wp中的所有文本，一个wp中可能有多个wr
- * @param {Object} $wp wp引用
- * @returns wp标签中的所有文本
- */
-function getWpAllText($wp) {
-    let text = '';
-    const wtList = $wp.find('w\\:t');
-    wtList.each((i, v) => {
-        text += wtList.eq(i).text();
-    });
-    return text;
 }
 
 /**
@@ -385,34 +295,20 @@ function removeExtraComments(xml) {
     return $.xml();
 }
 
-/**
- * 行列转换
- * @param matrix 二维矩阵
- * @returns 转换后的二维矩阵
- */
-function transposeMatrix(matrix) {
-    return matrix[0].map((v, i) => matrix.map(k => k[i]));
-}
-
 module.exports = {
     getTableByName,
     getWtByText,
     getChartPathByName,
     getChartPathByRid,
     getChartDrawingPathByChartPath,
-    loadXmlFile,
-    loadXmlStr,
     deleteFileSync,
     getTableCellText,
-    getWpAllText,
     removeExtraComments,
     getNumberingByName,
     writeToWpInSingleWr,
-    getWpByText,
     getExcelPathByChartName,
     getExcelPathByChartPath,
     setWpIndent,
-    getFileList,
     getFootnotesPath,
     getFootnoteIdByContent,
     getFootnoteContentById,

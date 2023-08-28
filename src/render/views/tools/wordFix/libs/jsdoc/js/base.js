@@ -1,140 +1,160 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getFileList = exports.loadXmlStr = exports.loadXmlFile = exports.unPkg = exports.pkg = void 0;
-var archiver_1 = require("archiver");
-var fs_1 = require("fs");
-var path_1 = require("path");
-var adm_zip_1 = require("adm-zip");
-var cheerio = require("cheerio");
+const archiver = require('archiver');
+const fs = require('fs');
+const fse = require('fs-extra');
+const path = require('path');
+const AdmZip = require('adm-zip');
+const cheerio = require('cheerio');
+
 /**
  * @file 基础操作相关方法
  * @author haoluo2
  * @version 1.0.0
  */
+
 /**
  * 把文件夹打包为Word文件
- * 此方法依赖node-archiver{@link https://github.com/archiverjs/node-archiver}
- * @requires https://github.com/archiverjs/node-archiver
+ * 
  * @memberof base
- * @param docPath 解压后的文档文件夹路径
- * @param destPath 压缩后的docx文档地址
- * @returns 压缩后的docx文档地址，如果destPath有效，则使用该地址，否则使用`${docPath}.docx`
+ * @param {String} docPath - 解压后的文档文件夹路径
+ * @param {String} [destPath] - 可选，生成的docx文档地址
+ * @returns {String} 压缩后的docx文档地址，如果destPath有效，则使用该地址，否则在docPath当前目录中生成
  */
-function pkg(docPath, destPath) {
-    return new Promise(function (resolve, reject) {
+exports.pkg = function pkg(docPath, destPath) {
+    return new Promise((resolve, reject) => {
         try {
-            var zipPath_1 = "".concat(docPath, ".zip");
-            var output = fs_1.default.createWriteStream(zipPath_1);
-            var archive = (0, archiver_1.default)('zip', { zlib: { level: 8 } });
+            const zipPath = `${docPath}.zip`;
+            const output = fs.createWriteStream(zipPath);
+            const archive = archiver('zip', { zlib: { level: 8 } });
             archive.pipe(output);
             archive.directory(docPath, false);
             archive.finalize();
-            archive.on('error', function (e) {
+
+            archive.on('error', e => {
                 reject(e);
             });
+
             // 创建流失败时触发的error，不会触发archive的error事件
-            output.on('error', function (e) {
+            output.on('error', e => {
                 reject(e);
             });
+
             // archive写入完成后，ouput自动关闭
-            output.on('close', function () {
+            output.on('close', () => {
                 // 重命名为docx
-                var wordPath = destPath !== null && destPath !== void 0 ? destPath : "".concat(docPath, ".docx");
-                fs_1.default.renameSync(zipPath_1, wordPath);
+                const wordPath = destPath ?? `${docPath}.docx`;
+                fs.renameSync(zipPath, wordPath);
                 resolve(wordPath);
             });
-        }
-        catch (e) {
+        } catch (e) {
             reject(e);
         }
     });
 }
-exports.pkg = pkg;
+
 /**
  * 解压Word文件
- * 此方法依赖adm-zip{@link https://github.com/cthackers/adm-zip}
- * @requires https://github.com/cthackers/adm-zip
+ * 
  * @memberof base
- * @param docPath Word文件路径
- * @returns 解压后的文档文件夹路径
+ * @param {String} docPath - Word文件路径
+ * @returns {String} 解压后的文档文件夹路径
  */
-function unPkg(docPath) {
-    return new Promise(function (resolve, reject) {
-        var zipPath = docPath.replace('.docx', '.zip');
-        var dirPath = docPath.replace('.docx', '');
-        fs_1.default.renameSync(docPath, zipPath);
+exports.unPkg = function unPkg(docPath) {
+    return new Promise((resolve, reject) => {
+        const zipPath = docPath.replace('.docx', '.zip');
+        const dirPath = docPath.replace('.docx', '');
+        fs.renameSync(docPath, zipPath);
+
         try {
-            var zip = new adm_zip_1.default(zipPath);
+            const zip = new AdmZip(zipPath);
             zip.extractAllTo(dirPath, true);
-            fs_1.default.renameSync(zipPath, docPath);
+
+            fs.renameSync(zipPath, docPath);
+
             resolve(dirPath);
-        }
-        catch (err) {
+        } catch(err) {
             reject(err);
         }
     });
 }
-exports.unPkg = unPkg;
+
 // cheerio解析xml参数
-var cheerioOptions = {
+const cheerioOptions = {
     normalizeWhitespace: false,
     xmlMode: true,
     decodeEntities: false
-};
+}
+
 /**
  * 解析xml文件
+ * 
  * @memberof base
- * @param filePath xml文件路径
- * @returns cheerio.Root，继承自Selector，选择器返回Cheerio
+ * @param {String} filePath - xml文件路径
+ * @returns {Cheerio.Root} Cheerio.Root(extends Selector)
+ * @example
+ * ```js
+ * const $ = loadXmlFile('filePath.xml');
+ * $('w\\:p').text('test');
+ * ```
  */
-function loadXmlFile(filePath) {
-    try {
-        return cheerio.load(fs_1.default.readFileSync(filePath), cheerioOptions);
-    }
-    catch (_a) {
-        throw new Error('解析xml文件失败，filePath：' + filePath);
-    }
+exports.loadXmlFile = function loadXmlFile(filePath) {
+    return cheerio.load(fs.readFileSync(filePath), cheerioOptions);
 }
-exports.loadXmlFile = loadXmlFile;
+
 /**
  * 解析xml字符串
+ * 
  * @memberof base
- * @param xml xml字符串
- * @returns cheerio.Root，继承自Selector，选择器返回Cheerio
+ * @param {String} xml - xml字符串
+ * @returns {Cheerio.Root} Cheerio.Root(extends Selector)
+ * @see {@link loadXmlFile}
  */
-function loadXmlStr(xml) {
-    try {
-        return cheerio.load(xml, cheerioOptions);
-    }
-    catch (_a) {
-        throw new Error('解析xml字符串失败,xml:' + xml);
-    }
+exports.loadXmlStr = function loadXmlStr(xml) {
+    return cheerio.load(xml, cheerioOptions);
 }
-exports.loadXmlStr = loadXmlStr;
+
 /**
  * 递归获取文件夹中的文件，默认只取docx文件
+ * 
  * @memberof base
- * @param dirPath 文件夹路径
- * @param filters 可选，指定要获取的文件的后缀名，如.docx
- * @returns 文件路径列表
+ * @param {String} dirPath - 文件夹路径
+ * @param {Array} [filters=['.docx']] - 可选，指定要获取的文件的后缀名，如.docx
+ * @returns {Array} 文件路径列表
  */
-function getFileList(dirPath, filters) {
-    var fileList = fs_1.default.readdirSync(dirPath, { withFileTypes: true });
-    return fileList.filter(function (dirent) {
+exports.getFileList = function getFileList(dirPath, filters=['.docx']) {
+    const fileList = fs.readdirSync(dirPath, { withFileTypes: true });
+    return fileList.filter(dirent => {
         // 过滤其他不相关文件，只保留文件夹和word文件（默认）
-        var ext = path_1.default.extname(dirent.name);
-        if (dirent.isDirectory())
-            return true;
+        const ext = path.extname(dirent.name);
+        if (dirent.isDirectory()) return true;
         // 默认只保留docx文件
-        if (!(filters === null || filters === void 0 ? void 0 : filters.length))
-            filters === null || filters === void 0 ? void 0 : filters.push('.docx');
-        return filters === null || filters === void 0 ? void 0 : filters.includes(ext);
-    }).map(function (dirent) {
+        if (!filters?.length) filters?.push('.docx')
+        return filters?.includes(ext);
+    }).map(dirent => {
         if (dirent.isFile()) {
-            return path_1.default.join(dirPath, dirent.name);
+            return path.join(dirPath, dirent.name);
         }
         // isDirectory
-        return getFileList(path_1.default.join(dirPath, dirent.name));
+        return getFileList(path.join(dirPath, dirent.name));
     }).flat();
 }
-exports.getFileList = getFileList;
+
+/**
+ * 二维数组行列转换
+ * 
+ * @memberof base
+ * @param {Array} matrix - 二维数组
+ * @returns {Array} 行列转置后的数组
+ */
+exports.transposeMatrix = function transposeMatrix(matrix) {
+    return matrix[0].map((v, i) => matrix.map(k => k[i]));
+}
+
+/**
+ * 删除文件
+ * 
+ * @memberof base
+ * @param {String} filePath - 文件地址
+ */
+exports.delFileSync = function delFileSync(filePath) {
+    fse.removeSync(filePath);
+}
