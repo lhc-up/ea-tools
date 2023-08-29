@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Namespace: Base</title>
+    <title>JSDoc: Namespace: Chart</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Namespace: Base</h1>
+    <h1 class="page-title">Namespace: Chart</h1>
 
     
 
@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2>Base</h2>
+        <h2>Chart</h2>
         
     
 </header>
@@ -37,7 +37,7 @@
     <div class="container-overview">
     
         
-            <div class="description">基础操作相关方法</div>
+            <div class="description">图表操作相关方法</div>
         
 
         
@@ -72,7 +72,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="base.js.html">base.js</a>, <a href="base.js.html#line14">line 14</a>
+        <a href="chart.js.html">chart.js</a>, <a href="chart.js.html#line11">line 11</a>
     </li></ul></dd>
     
 
@@ -111,7 +111,7 @@
     
 
     
-    <h4 class="name" id=".delFileSync"><span class="type-signature">(static) </span>delFileSync<span class="signature">(filePath)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".getChartDrawingPathByChartPath"><span class="type-signature">(static) </span>getChartDrawingPathByChartPath<span class="signature">(chartPath)</span><span class="type-signature"> &rarr; {String}</span></h4>
     
 
     
@@ -119,7 +119,7 @@
 
 
 <div class="description">
-    删除文件
+    根据图表chart.xml路径找到drawing.xml路径
 </div>
 
 
@@ -155,7 +155,7 @@
 
         <tr>
             
-                <td class="name"><code>filePath</code></td>
+                <td class="name"><code>chartPath</code></td>
             
 
             <td class="type">
@@ -171,7 +171,7 @@
 
             
 
-            <td class="description last">文件地址</td>
+            <td class="description last">图表chartN.xml文件路径</td>
         </tr>
 
     
@@ -212,7 +212,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="base.js.html">base.js</a>, <a href="base.js.html#line164">line 164</a>
+        <a href="chart.js.html">chart.js</a>, <a href="chart.js.html#line104">line 104</a>
     </li></ul></dd>
     
 
@@ -237,6 +237,28 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    图表中的drawing.xml路径，如散点图中的辅助线
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">String</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -248,7 +270,7 @@
     
 
     
-    <h4 class="name" id=".getFileList"><span class="type-signature">(static) </span>getFileList<span class="signature">(dirPath, filters<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Array}</span></h4>
+    <h4 class="name" id=".getChartPathByName"><span class="type-signature">(static) </span>getChartPathByName<span class="signature">(docPath, chartName, $, strict<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {String}</span></h4>
     
 
     
@@ -256,7 +278,7 @@
 
 
 <div class="description">
-    递归获取文件夹中的文件，默认只取docx文件
+    根据图表名称找到图表chart.xml文件路径，匹配到多个时只取第一个
 </div>
 
 
@@ -296,7 +318,7 @@
 
         <tr>
             
-                <td class="name"><code>dirPath</code></td>
+                <td class="name"><code>docPath</code></td>
             
 
             <td class="type">
@@ -324,20 +346,93 @@
                 </td>
             
 
-            <td class="description last">文件夹路径</td>
+            <td class="description last"></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>filters</code></td>
+                <td class="name"><code>chartName</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Array</span>
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>$</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Selector</span>
+|
+
+<span class="param-type">Cheerio</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Selector(由loadXmlFile或loadXmlStr得到)或者Cheerio实例</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>strict</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
 
 
             
@@ -358,12 +453,12 @@
             
                 <td class="default">
                 
-                    ['.docx']
+                    false
                 
                 </td>
             
 
-            <td class="description last">可选，指定要获取的文件的后缀名，如.docx</td>
+            <td class="description last">是否严格模式，若为true则使用===匹配，否则使用includes方法</td>
         </tr>
 
     
@@ -404,7 +499,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="base.js.html">base.js</a>, <a href="base.js.html#line129">line 129</a>
+        <a href="chart.js.html">chart.js</a>, <a href="chart.js.html#line68">line 68</a>
     </li></ul></dd>
     
 
@@ -433,7 +528,7 @@
 
         
 <div class="param-desc">
-    文件路径列表
+    图表chartN.xml文件路径
 </div>
 
 
@@ -444,7 +539,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Array</span>
+<span class="param-type">String</span>
 
 
     </dd>
@@ -462,7 +557,7 @@
     
 
     
-    <h4 class="name" id=".loadXmlFile"><span class="type-signature">(static) </span>loadXmlFile<span class="signature">(filePath)</span><span class="type-signature"> &rarr; {Cheerio.Root}</span></h4>
+    <h4 class="name" id=".getChartPathByRid"><span class="type-signature">(static) </span>getChartPathByRid<span class="signature">(docPath, rId, $)</span><span class="type-signature"> &rarr; {String}</span></h4>
     
 
     
@@ -470,7 +565,7 @@
 
 
 <div class="description">
-    解析xml文件
+    根据rId获取chart.xml路径
 </div>
 
 
@@ -506,7 +601,7 @@
 
         <tr>
             
-                <td class="name"><code>filePath</code></td>
+                <td class="name"><code>docPath</code></td>
             
 
             <td class="type">
@@ -522,164 +617,23 @@
 
             
 
-            <td class="description last">xml文件路径</td>
+            <td class="description last">文档文件夹</td>
         </tr>
 
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="base.js.html">base.js</a>, <a href="base.js.html#line105">line 105</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Cheerio.Root(extends Selector)
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Cheerio.Root</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>```js
-const $ = loadXmlFile('filePath.xml');
-$('w\\:p').text('test');
-```</code></pre>
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".loadXmlStr"><span class="type-signature">(static) </span>loadXmlStr<span class="signature">(xml)</span><span class="type-signature"> &rarr; {Cheerio.Root}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    解析xml字符串
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
     
 
         <tr>
             
-                <td class="name"><code>xml</code></td>
+                <td class="name"><code>rId</code></td>
             
 
             <td class="type">
             
                 
 <span class="param-type">String</span>
+|
+
+<span class="param-type">Number</span>
 
 
             
@@ -689,7 +643,33 @@ $('w\\:p').text('test');
 
             
 
-            <td class="description last">xml字符串</td>
+            <td class="description last">document.xml中，图表的引用id</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>$</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Selector</span>
+|
+
+<span class="param-type">Cheerio</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Selector(由loadXmlFile或loadXmlStr得到)或者Cheerio实例</td>
         </tr>
 
     
@@ -730,19 +710,12 @@ $('w\\:p').text('test');
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="base.js.html">base.js</a>, <a href="base.js.html#line117">line 117</a>
+        <a href="chart.js.html">chart.js</a>, <a href="chart.js.html#line90">line 90</a>
     </li></ul></dd>
     
 
     
 
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li>loadXmlFile</li>
-        </ul>
-    </dd>
     
 
     
@@ -766,7 +739,7 @@ $('w\\:p').text('test');
 
         
 <div class="param-desc">
-    Cheerio.Root(extends Selector)
+    图表chartN.xml文件路径
 </div>
 
 
@@ -777,7 +750,7 @@ $('w\\:p').text('test');
     </dt>
     <dd>
         
-<span class="param-type">Cheerio.Root</span>
+<span class="param-type">String</span>
 
 
     </dd>
@@ -795,7 +768,7 @@ $('w\\:p').text('test');
     
 
     
-    <h4 class="name" id=".pkg"><span class="type-signature">(static) </span>pkg<span class="signature">(docPath, destPath<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {String}</span></h4>
+    <h4 class="name" id=".getExcelPathByChartName"><span class="type-signature">(static) </span>getExcelPathByChartName<span class="signature">(docPath, chartName, $, strict<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {String}</span></h4>
     
 
     
@@ -803,7 +776,7 @@ $('w\\:p').text('test');
 
 
 <div class="description">
-    把文件夹打包为Word文件
+    根据图表名称找到与图表关联的excel路径
 </div>
 
 
@@ -831,6 +804,8 @@ $('w\\:p').text('test');
         
 
         
+        <th>Default</th>
+        
 
         <th class="last">Description</th>
     </tr>
@@ -864,21 +839,98 @@ $('w\\:p').text('test');
             
 
             
+                <td class="default">
+                
+                </td>
+            
 
-            <td class="description last">解压后的文档文件夹路径</td>
+            <td class="description last">文档文件夹</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>destPath</code></td>
+                <td class="name"><code>chartName</code></td>
             
 
             <td class="type">
             
                 
 <span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">图表名称</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>$</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Selector</span>
+|
+
+<span class="param-type">Cheerio</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Selector(由loadXmlFile或loadXmlStr得到)或者Cheerio实例</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>strict</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
 
 
             
@@ -897,8 +949,14 @@ $('w\\:p').text('test');
             
 
             
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
 
-            <td class="description last">可选，生成的docx文档地址</td>
+            <td class="description last">是否严格模式，若为true则使用===匹配，否则使用includes方法</td>
         </tr>
 
     
@@ -939,7 +997,7 @@ $('w\\:p').text('test');
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="base.js.html">base.js</a>, <a href="base.js.html#line28">line 28</a>
+        <a href="chart.js.html">chart.js</a>, <a href="chart.js.html#line27">line 27</a>
     </li></ul></dd>
     
 
@@ -968,7 +1026,7 @@ $('w\\:p').text('test');
 
         
 <div class="param-desc">
-    压缩后的docx文档地址，如果destPath有效，则使用该地址，否则在docPath当前目录中生成
+    图表关联的Excel文件路径
 </div>
 
 
@@ -997,7 +1055,7 @@ $('w\\:p').text('test');
     
 
     
-    <h4 class="name" id=".transposeMatrix"><span class="type-signature">(static) </span>transposeMatrix<span class="signature">(matrix)</span><span class="type-signature"> &rarr; {Array}</span></h4>
+    <h4 class="name" id=".getExcelPathByChartPath"><span class="type-signature">(static) </span>getExcelPathByChartPath<span class="signature">(docPath, chartPath)</span><span class="type-signature"> &rarr; {String}</span></h4>
     
 
     
@@ -1005,166 +1063,7 @@ $('w\\:p').text('test');
 
 
 <div class="description">
-    二维数组行列转换
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>matrix</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">二维数组</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="base.js.html">base.js</a>, <a href="base.js.html#line154">line 154</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    行列转置后的数组
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Array</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id=".unPkg"><span class="type-signature">(static) </span>unPkg<span class="signature">(docPath)</span><span class="type-signature"> &rarr; {String}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    解压Word文件
+    根据图表chartN.xml文件路径找到对应的Excel文件路径
 </div>
 
 
@@ -1216,7 +1115,30 @@ $('w\\:p').text('test');
 
             
 
-            <td class="description last">Word文件路径</td>
+            <td class="description last">文档文件夹</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>chartPath</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">图表chartN.xml文件路径</td>
         </tr>
 
     
@@ -1257,7 +1179,7 @@ $('w\\:p').text('test');
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="base.js.html">base.js</a>, <a href="base.js.html#line67">line 67</a>
+        <a href="chart.js.html">chart.js</a>, <a href="chart.js.html#line41">line 41</a>
     </li></ul></dd>
     
 
@@ -1286,7 +1208,7 @@ $('w\\:p').text('test');
 
         
 <div class="param-desc">
-    解压后的文档文件夹路径
+    图表关联的Excel文件路径
 </div>
 
 

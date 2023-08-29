@@ -12,14 +12,20 @@ const cheerio = require('cheerio');
  */
 
 /**
+ * 基础操作相关方法
+ * @namespace Base
+ */
+exports.Base = {};
+
+/**
  * 把文件夹打包为Word文件
  * 
- * @memberof base
+ * @memberof Base
  * @param {String} docPath - 解压后的文档文件夹路径
  * @param {String} [destPath] - 可选，生成的docx文档地址
  * @returns {String} 压缩后的docx文档地址，如果destPath有效，则使用该地址，否则在docPath当前目录中生成
  */
-exports.pkg = function pkg(docPath, destPath) {
+Base.pkg = function pkg(docPath, destPath) {
     return new Promise((resolve, reject) => {
         try {
             const zipPath = `${docPath}.zip`;
@@ -54,11 +60,11 @@ exports.pkg = function pkg(docPath, destPath) {
 /**
  * 解压Word文件
  * 
- * @memberof base
+ * @memberof Base
  * @param {String} docPath - Word文件路径
  * @returns {String} 解压后的文档文件夹路径
  */
-exports.unPkg = function unPkg(docPath) {
+Base.unPkg = function unPkg(docPath) {
     return new Promise((resolve, reject) => {
         const zipPath = docPath.replace('.docx', '.zip');
         const dirPath = docPath.replace('.docx', '');
@@ -87,7 +93,7 @@ const cheerioOptions = {
 /**
  * 解析xml文件
  * 
- * @memberof base
+ * @memberof Base
  * @param {String} filePath - xml文件路径
  * @returns {Cheerio.Root} Cheerio.Root(extends Selector)
  * @example
@@ -96,31 +102,31 @@ const cheerioOptions = {
  * $('w\\:p').text('test');
  * ```
  */
-exports.loadXmlFile = function loadXmlFile(filePath) {
+Base.loadXmlFile = function loadXmlFile(filePath) {
     return cheerio.load(fs.readFileSync(filePath), cheerioOptions);
 }
 
 /**
  * 解析xml字符串
  * 
- * @memberof base
+ * @memberof Base
  * @param {String} xml - xml字符串
  * @returns {Cheerio.Root} Cheerio.Root(extends Selector)
  * @see {@link loadXmlFile}
  */
-exports.loadXmlStr = function loadXmlStr(xml) {
+Base.loadXmlStr = function loadXmlStr(xml) {
     return cheerio.load(xml, cheerioOptions);
 }
 
 /**
  * 递归获取文件夹中的文件，默认只取docx文件
  * 
- * @memberof base
+ * @memberof Base
  * @param {String} dirPath - 文件夹路径
  * @param {Array} [filters=['.docx']] - 可选，指定要获取的文件的后缀名，如.docx
  * @returns {Array} 文件路径列表
  */
-exports.getFileList = function getFileList(dirPath, filters=['.docx']) {
+Base.getFileList = function getFileList(dirPath, filters=['.docx']) {
     const fileList = fs.readdirSync(dirPath, { withFileTypes: true });
     return fileList.filter(dirent => {
         // 过滤其他不相关文件，只保留文件夹和word文件（默认）
@@ -141,20 +147,20 @@ exports.getFileList = function getFileList(dirPath, filters=['.docx']) {
 /**
  * 二维数组行列转换
  * 
- * @memberof base
+ * @memberof Base
  * @param {Array} matrix - 二维数组
  * @returns {Array} 行列转置后的数组
  */
-exports.transposeMatrix = function transposeMatrix(matrix) {
+Base.transposeMatrix = function transposeMatrix(matrix) {
     return matrix[0].map((v, i) => matrix.map(k => k[i]));
 }
 
 /**
  * 删除文件
  * 
- * @memberof base
+ * @memberof Base
  * @param {String} filePath - 文件地址
  */
-exports.delFileSync = function delFileSync(filePath) {
+Base.delFileSync = function delFileSync(filePath) {
     fse.removeSync(filePath);
 }
