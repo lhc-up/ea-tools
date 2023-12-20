@@ -28,7 +28,7 @@ const build = {
             // 要压缩的文件夹
             let zipPath = viewRenderConfig.output.path;
             // 压缩的文件
-            let filePath = path.join(zipPath, `../pack/update-pkg-${version.join('.')}.zip`);
+            let filePath = path.join(zipPath, `../pack/update-pkg-${version}.zip`);
             this.compress(zipPath, filePath, 7, (type, msg) => {
                 if (type === 'error') {
                     Promise.reject('压缩文件时出错：' + msg);
@@ -50,7 +50,7 @@ const build = {
             const electronBuilder = require('electron-builder');
             const packageJson = require('../package.json');
             console.log('打包输出===>', res)
-            packageJson.version = version.slice(0, 3).join('.');
+            packageJson.version = version;
             fs.writeFileSync(path.join(__dirname, '../package.json'), JSON.stringify(packageJson, null, 4));
             electronBuilder.build().then(() => {
                 this.buildEnd();
