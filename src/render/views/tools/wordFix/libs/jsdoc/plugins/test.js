@@ -18,8 +18,10 @@ module.exports = {
             if (doclet.kind === 'file') {
                 files.push(doclet);
             }
-            if (['base', 'wrapper'].includes(doclet.memberof)) {
+            if (['Base', 'Chart', 'Comment', 'Footnote', 'Paragraph', 'Table'].includes(doclet.memberof)) {
                 docs.push(doclet);
+            } else {
+                console.log(doclet);
             }
         },
         parseComplete: (({ sourcefiles, doclets }) => {

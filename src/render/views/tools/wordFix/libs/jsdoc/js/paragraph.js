@@ -1,3 +1,5 @@
+const { Base } = require('./base.js');
+
 /**
  * @file 段落操作相关方法
  * @author haoluo2
@@ -156,4 +158,62 @@ Paragraph.setWpIndent = function setWpIndent($wp, {
     if (leftChars) {
         $ind.attr('w:leftChars', leftChars * 100);   
     }
+}
+
+
+/**
+ * ==============================================================================
+ * 以下方法供页面选择使用
+ * ==============================================================================
+ */
+
+/**
+ * 加粗文字
+ * 
+ * @memberof Paragraph
+ * @param {String} xml - xml字符串
+ * @param {String} text - 用于找到段落的文字，需保证唯一性
+ * @param {Array} boldArr - 需要加粗的文字列表
+ * @returns {String} 加粗后的xml字符串
+ */
+Paragraph.setBoldForText = function setBoldForText(xml, text, boldArr) {
+    const $ = Base.loadXmlStr(xml);
+    const $wp = Paragraph.getWpByText($, text);
+    if (!$wp) {
+        this.addLog(`未找到${text}所在的段落`);
+        return xml;
+    }
+
+    const wpText = Paragraph.getWpAllText($wp);
+    
+    // /(text1)|(text2)|(text3)/g
+    const reg = new RegExp(`${boldArr.map(v => `(${v})`).join('|')}`, 'g');
+    const identifier = '=*=';
+    const textArr = wpText
+        // 需要加粗的文字替换为特殊标识
+        .replace(reg, identifier)
+        // 以上述特殊标识分隔文字
+        .split(identifier);
+    const wr = $wp.find('w\\:r:first').clone();
+    const boldWr = wr.clone();
+    boldWr.find('w\\:b').remove();
+    boldWr.find('w\\:rPr').append('<w:b />');
+
+    // 移除所有加粗标签
+    $wp.find('w\\:b').remove();
+    // 移除所有wr
+    $wp.find('w\\:r').remove();
+    textArr.forEach((v, i) => {
+        if (v) {
+            const node = wr.clone();
+            node.find('w\\:t').text(v);
+            $wp.append(node);
+        }
+        if (i < textArr.length - 1) {
+            const node = boldWr.clone();
+            node.find('w\\:t').text(boldArr[i]);
+            $wp.append(node);
+        }
+    });
+    return $.xml();
 }

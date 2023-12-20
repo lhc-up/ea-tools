@@ -113,3 +113,7 @@ Chart.getChartDrawingPathByChartPath = function getChartDrawingPathByChartPath(c
     const drawingTarget = rel.attr('Target');
     return path.resolve(path.dirname(chartPath), drawingTarget);
 }
+
+Chart.renameCValAxTitle = function renameCValAxTitle() {
+    
+}
